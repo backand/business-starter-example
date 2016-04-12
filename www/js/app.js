@@ -7,12 +7,14 @@ angular.module('ionicApp',
     'backand',
     'SimpleRESTIonic.controllers',
     'SimpleRESTIonic.services',
-    'directivesModule'])
+    'directivesModule'
+  ])
   .config(function (BackandProvider) {
     BackandProvider.setAppName('mycompanystart');
     BackandProvider.setSignUpToken('8b87f9fa-f751-4400-bded-6b5adcc9312a');
     BackandProvider.setAnonymousToken('86e22c04-85c5-498a-a6cd-037293f8477c');
   })
+
   .run(function ($ionicPlatform, $rootScope, $state, Backand) {
 
     // $rootScope.$on('$stateChangeSuccess', function() {
@@ -20,7 +22,7 @@ angular.module('ionicApp',
     // });
 
     $ionicPlatform.ready(function () {
-
+      
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
       // for form inputs)
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -56,8 +58,8 @@ angular.module('ionicApp',
         url: '/home',
         views: {
           'menuContent': {
-             templateUrl: 'templates/tab-home.html',
-             controller: 'HomeCtrl'
+            templateUrl: 'templates/tab-home.html',
+            controller: 'HomeCtrl'
           }
         }
       })

@@ -21,7 +21,15 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    {
+      "locator": "https://github.com/shazron/KeychainPlugin.git",
+      "id": "com.shazron.cordova.plugin.keychainutil"
+    },
+    {
+      "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-file.git",
+      "id": "cordova-plugin-file"
+    }
   ],
   "cordovaPlatforms": [
     "ios",

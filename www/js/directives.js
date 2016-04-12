@@ -34,7 +34,7 @@ app.directive('section', function () {
 });
 app.directive('sectionsMenu', function () {
 
-  var controller = ['$scope', 'MenuService', '$rootScope' , function ($scope, MenuService, $rootScope) {
+  var controller = ['$scope', 'MenuService', '$rootScope', function ($scope, MenuService, $rootScope) {
 
       function init() {
         MenuService.getMenu().then(function (data) {
@@ -62,11 +62,13 @@ app.directive('sectionsMenu', function () {
 });
 app.directive('sectionItem', function () {
 
-  var controller = ['$scope', function ($scope) {
-      $scope.goToUrl = function(url){
+  var controller = ['$scope', '$http', function ($scope, $http) {
+      $scope.goToUrl = function (url) {
         window.open(url, '_system', 'location=yes');
         return false;
       }
+
+
     }],
 
     template = `
