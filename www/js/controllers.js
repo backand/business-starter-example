@@ -71,6 +71,11 @@ angular.module('SimpleRESTIonic.controllers', [])
   })
 
   .controller('DashboardCtrl', function (MenuService, $timeout, $stateParams, $scope,$ionicNavBarDelegate) {
+    $ionicNavBarDelegate.showBackButton(true);
+
+    $scope.toggleLeft = function () {
+      $ionicSideMenuDelegate.toggleLeft();
+    };
 
     $scope.$on('$ionicView.beforeEnter', function (event, view) {
       var buttons = document.getElementsByClassName("back-button")
@@ -84,7 +89,7 @@ angular.module('SimpleRESTIonic.controllers', [])
 
 
       // view.enableBack = true;
-      $ionicNavBarDelegate.showBackButton(true);
+      // $ionicNavBarDelegate.showBackButton(true);
 
       var sectionId = $stateParams.sectionId;
 
@@ -121,7 +126,7 @@ angular.module('SimpleRESTIonic.controllers', [])
   })
 
   .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
-    $ionicNavBarDelegate.showBackButton(true);
+    // $ionicNavBarDelegate.showBackButton(true);
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };

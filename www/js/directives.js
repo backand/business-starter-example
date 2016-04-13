@@ -52,7 +52,7 @@ app.directive('sectionsMenu', function () {
 
     template = `
     <a ng-click="logout()" class="item" menu-close>Logout</a>
-    <a href="/#/tab/home" class="item" menu-close>Home</a>
+    <a ui-sref="tabs.home()" class="item" menu-close>Home</a>
     <!--<a ng-repeat="item in data" ui-sref="tabs.dashboard({sectionId: item.sectionId})" class="item" menu-close>{{item.sectionTitle}}</a>    -->
 `;
 
