@@ -1,0 +1,31 @@
+{
+  "name": "ng-persist",
+  "version": "1.0.0",
+  "description": "Store data on mobile devices that persists even if the user reinstalls the app",
+  "main": "dist/ng-persist.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AlexDisler/ng-persist.git"
+  },
+  "keywords": [
+    "ionic",
+    "cordova",
+    "angular"
+  ],
+  "author": "Alex Disler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlexDisler/ng-persist/issues"
+  },
+  "homepage": "https://github.com/AlexDisler/ng-persist",
+  "dependencies": {
+    "gulp": "3.8.11",
+    "gulp-babel": "4.0.0",
+    "gulp-concat": "2.5.2",
+    "gulp-ng-annotate": "0.5.2",
+    "gulp-plumber": "1.0.0"
+  }
+}

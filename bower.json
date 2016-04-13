@@ -8,6 +8,7 @@
     "ngFx": "^1.1.0",
     "ng-persist": "*",
     "ngstorage": "^0.3.10",
-    "angular-imgcache": "angular-imgcache.js#^1.0.0"
+    "angular-imgcache": "angular-imgcache.js#^1.0.0",
+    "ion-md-input": "^1.0.4"
   }
 }

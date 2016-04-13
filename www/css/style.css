@@ -14,3 +14,26 @@ div.spinner {
 .nav-bar-title {
   margin-left:20px;
 }
+
+
+@keyframes animatedBackground {
+  from { background-position: 0 0; }
+  to { background-position: 50% 0; }
+}
+
+
+.animate-area	{
+
+}
+
+
+.scroll-content2{
+  background: url(../img/mountains.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  animation: animatedBackground 10s linear;
+}
+
+.back-button{z-index:5;}

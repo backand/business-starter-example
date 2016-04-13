@@ -34,21 +34,26 @@ app.directive('section', function () {
 });
 app.directive('sectionsMenu', function () {
 
-  var controller = ['$scope', 'MenuService', '$rootScope', function ($scope, MenuService, $rootScope) {
+  var controller = ['$scope', 'MenuService', '$rootScope', 'LoginService',  function ($scope, MenuService, $rootScope, LoginService) {
 
       function init() {
         MenuService.getMenu().then(function (data) {
           $scope.data = data.sections;
-
         });
       }
 
       init();
+
+      $scope.logout = function(){
+        LoginService.signout();
+        $rootScope.$broadcast('unauthorized');
+      }
     }],
 
     template = `
+    <a ng-click="logout()" class="item" menu-close>Logout</a>
     <a href="/#/tab/home" class="item" menu-close>Home</a>
-    <a ng-repeat="item in data" ui-sref="tabs.dashboard({sectionId: item.sectionId})" class="item" menu-close>{{item.sectionTitle}}</a>    
+    <!--<a ng-repeat="item in data" ui-sref="tabs.dashboard({sectionId: item.sectionId})" class="item" menu-close>{{item.sectionTitle}}</a>    -->
 `;
 
   return {

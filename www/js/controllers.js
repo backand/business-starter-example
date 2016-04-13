@@ -1,70 +1,36 @@
 angular.module('SimpleRESTIonic.controllers', [])
 
-  .controller('LoginCtrl', function (Backand, $state, $rootScope, LoginService) {
-    var login = this;
+  .controller('LoginCtrl', function ($scope, Backand, $state, $rootScope, $ionicPopup, LoginService) {
 
-    function signin() {
-      LoginService.signin(login.email, login.password)
+    function showAlert(title, message) {
+      var alertPopup = $ionicPopup.alert({
+        title: title,
+        template: message
+      });
+
+      alertPopup.then(function(res) {
+        console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+
+    $scope.login = function(){
+      $scope.errorMsg = '';
+      LoginService.signin(this.email, this.password)
+
         .then(function () {
           onLogin();
         }, function (error) {
-          console.log(error)
-        })
-    }
+          //$scope.errorMsg = error.error_description;
+          showAlert('Login Error', error.error_description);
 
-    function anonymousLogin() {
-      LoginService.anonymousLogin();
-      onLogin('Guest');
+        })
     }
 
     function onLogin(username) {
       $rootScope.$broadcast('authorized');
-      $state.go('tab.dashboard');
+      $state.go('tabs.home');
       login.username = username || Backand.getUsername();
     }
-
-    function signout() {
-      LoginService.signout()
-        .then(function () {
-          //$state.go('tab.login');
-          $rootScope.$broadcast('logout');
-          $state.go($state.current, {}, {reload: true});
-        })
-
-    }
-
-    function socialSignIn(provider) {
-      LoginService.socialSignIn(provider)
-        .then(onValidLogin, onErrorInLogin);
-
-    }
-
-    function socialSignUp(provider) {
-      LoginService.socialSignUp(provider)
-        .then(onValidLogin, onErrorInLogin);
-
-    }
-
-    onValidLogin = function (response) {
-      onLogin();
-      login.username = response.data || login.username;
-    }
-
-    onErrorInLogin = function (rejection) {
-      login.error = rejection.data;
-      $rootScope.$broadcast('logout');
-
-    }
-
-
-    login.username = '';
-    login.error = '';
-    login.signin = signin;
-    login.signout = signout;
-    login.anonymousLogin = anonymousLogin;
-    login.socialSignup = socialSignUp;
-    login.socialSignin = socialSignIn;
-
   })
 
   .controller('SignUpCtrl', function (Backand, $state, $rootScope, LoginService) {
@@ -104,10 +70,21 @@ angular.module('SimpleRESTIonic.controllers', [])
     vm.errorMessage = '';
   })
 
-  .controller('DashboardCtrl', function (MenuService, $timeout, $stateParams, $scope) {
+  .controller('DashboardCtrl', function (MenuService, $timeout, $stateParams, $scope,$ionicNavBarDelegate) {
 
     $scope.$on('$ionicView.beforeEnter', function (event, view) {
+      var buttons = document.getElementsByClassName("back-button")
+      // var remove_class = 'hide';
+      //
+      // for(i=0;i<buttons.length;i++){
+      //   button = buttons[i];
+      //   button.className = button.className.replace(' ' + remove_class, '').replace(remove_class, '');
+      // }
+
+
+
       // view.enableBack = true;
+      $ionicNavBarDelegate.showBackButton(true);
 
       var sectionId = $stateParams.sectionId;
 
@@ -142,19 +119,28 @@ angular.module('SimpleRESTIonic.controllers', [])
       }
     })
   })
-  .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate, $timeout) {
+
+  .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
+    $ionicNavBarDelegate.showBackButton(true);
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
 
     function init() {
-      var colorArray = ['balanced', 'balanced-900', 'balanced-100', 'energized-900', 'energized', 'energized-100', 'calm-900', 'royal', 'balanced', 'energized', 'assertive', 'stable', 'light', 'dark'];
+      var colorArray = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B',
+        '#FFC107'];
 
 
       MenuService.getMenu().then(function (data) {
         $scope.data = angular.copy(data.sections);
         for (i = 0; i < $scope.data.length; i++) {
-          $scope.data[i].color = colorArray[i] + '-bg';
+
+          if(i >= colorArray.length){
+            $scope.data[i].color = 'background-color: #FF9800;';
+          }
+          else {
+            $scope.data[i].color = 'background-color: ' + colorArray[i];
+          }
         }
 
 

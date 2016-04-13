@@ -24,7 +24,6 @@
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <!--<link href="https://fonts.googleapis.com/css?family=RobotoDraft%3A400%2C500%2C700%2C400italic" rel="stylesheet" type="text/css">-->
   <script src="lib/ionic-material/dist/ionic.material.min.js"></script>
-  <link href="lib/ionic-material/dist/ionic.material.css" rel="stylesheet">
 
   <script src="lib/angularbknd-sdk/dist/backand.debug.js"></script>
 
@@ -35,27 +34,60 @@
   <script src="js/services.js"></script>
   <script src="js/directives.js"></script>
   <link href="css/animate.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="lib/ion-md-input/css/ion-md-input.css">
+  <script src="lib/ion-md-input/js/ion-md-input.js"></script>
+  <link href="lib/ionic-material/dist/ionic.material.css" rel="stylesheet">
 
+  <link href="css/style.css" rel="stylesheet">
 
 
 </head>
 <body ng-controller="HomeCtrl">
 
+<ion-nav-view>
 
-<ion-nav-view></ion-nav-view>
+</ion-nav-view>
 
-<script id="templates/event-menu.html" type="text/ng-template">
+<!--<script id="templates/event-menu.html" type="text/ng-template">-->
+
   <ion-nav-bar class="bar-positive nav-title-slide-ios7">
+    <ion-side-menus enable-menu-with-back-views="true">
+      <ion-side-menu side="right">
+        <ion-header-bar class="bar-assertive">
+          <h1 class="title"></h1>
+        </ion-header-bar>
+        <ion-content>
+          <ul class="list animate-rip">
+            <sections-menu></sections-menu>
+          </ul>
+        </ion-content>
+      </ion-side-menu>
+    </ion-side-menus>
     <ion-nav-back-button class="">
       <i class="ion-arrow-left-c"></i>
-    </ion-nav-back-button>
-  </ion-nav-bar>
-  <ion-nav-view name="menuContent">
-</script>
 
-<script id="templates/home.html" type="text/ng-template">
+    <!--</ion-nav-back-button>-->
+    <!--<ion-nav-buttons side="right">-->
+      <!--<button class="button button-icon button-clear ion-navicon" menu-toggle="right">-->
+      <!--</button>-->
+    <!--</ion-nav-buttons>-->
+  <!--</ion-nav-bar>-->
 
-</script>
-</body>
+
+  <!--<ion-nav-view name="menuContent"></ion-nav-view>-->
+
+<!--</script>-->
+
+
+<!--<script id="templates/event-menu2.html" type="text/ng-template">-->
+  <!--&lt;!&ndash;<ion-nav-bar class="bar-positive ">&ndash;&gt;-->
+
+  <!--&lt;!&ndash;</ion-nav-bar>&ndash;&gt;-->
+  <!--&lt;!&ndash;<ion-nav-view name="menuContent">&ndash;&gt;-->
+
+
+<!--</script>-->
+
+
+</ion-nav-back-button></ion-nav-bar></body>
 </html>
