@@ -1,10 +1,11 @@
 <ion-view align-title="center">
-  <ion-nav-title>Backand Launcher</ion-nav-title>
+  <ion-nav-title>{{title}}</ion-nav-title>
   <ion-content>
     <div class="spinner" ng-show="!dataReady">
       <ion-spinner  icon="bubbles"></ion-spinner>
     </div>
-    <div ng-show="dataReady" ng-repeat="item in data" ui-sref="tabs.dashboard({sectionId: item.sectionId})"
+    <div ng-show="dataReady" ng-repeat="item in data"
+         ui-sref="tabs.dashboard({sectionId: item.sectionId})"
          class="list condensed-space no-padding animate-blinds done animated lightSpeedIn menu-close"
          style="margin: 0px; {{item.color}}">
       <a class="item clear-bg item-bg-image">

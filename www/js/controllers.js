@@ -8,12 +8,12 @@ angular.module('SimpleRESTIonic.controllers', [])
         template: message
       });
 
-      alertPopup.then(function(res) {
+      alertPopup.then(function (res) {
         console.log('Thank you for not eating my delicious ice cream cone');
       });
     };
 
-    $scope.login = function(){
+    $scope.login = function () {
       $scope.errorMsg = '';
       LoginService.signin(this.email, this.password)
 
@@ -70,66 +70,70 @@ angular.module('SimpleRESTIonic.controllers', [])
     vm.errorMessage = '';
   })
 
-  .controller('DashboardCtrl', function (MenuService, $timeout, $stateParams, $scope,$ionicNavBarDelegate) {
-    $ionicNavBarDelegate.showBackButton(true);
+  .controller('DashboardCtrl', function (MenuService, $timeout, $stateParams, $scope, $ionicNavBarDelegate) {
+
 
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
 
     $scope.$on('$ionicView.beforeEnter', function (event, view) {
-      var buttons = document.getElementsByClassName("back-button")
-      // var remove_class = 'hide';
-      //
-      // for(i=0;i<buttons.length;i++){
-      //   button = buttons[i];
-      //   button.className = button.className.replace(' ' + remove_class, '').replace(remove_class, '');
-      // }
+      if (view.stateName === "tabs.dashboard") {
+        var elem = document.getElementsByName("backButton");
+        for (var i = 0; i < elem.length; i++) {
+          angular.element(elem[i]).removeClass('hide')
+        }
+
+        var sectionId = $stateParams.sectionId;
+        if (sectionId) {
+          MenuService.getMenu().then(function (data) {
+            for (i = 0; i < data.sections.length; i++) {
+              if (data.sections[i].sectionId === sectionId) {
+                var section = angular.copy(data.sections[i]);
+                var items = angular.copy(section.items);
+                $scope.section = section;
+                $scope.section.items = [];
 
 
+                // add items in order to create animation
 
-      // view.enableBack = true;
-      // $ionicNavBarDelegate.showBackButton(true);
+                for (var i = 0; i < items.length; i++) {
+                  (function () {
+                    var j = i;
+                    $timeout(function () {
+                      $scope.section.items[j] = items[j];
+                      //$ionicScrollDelegate.resize();
+                    }, j * 100);
+                  })();
+                }
+                console.log($scope.section);
 
-      var sectionId = $stateParams.sectionId;
-
-      if (sectionId) {
-        MenuService.getMenu().then(function (data) {
-          for (i = 0; i < data.sections.length; i++) {
-            if (data.sections[i].sectionId === sectionId) {
-              var section = angular.copy(data.sections[i]);
-              var items = angular.copy(section.items);
-              $scope.section = section;
-              $scope.section.items = [];
-
-
-
-              // add items in order to create animation
-
-              for (var i = 0; i < items.length; i++) {
-                (function () {
-                  var j = i;
-                  $timeout(function () {
-                    $scope.section.items[j] = items[j];
-                    //$ionicScrollDelegate.resize();
-                  }, j * 100);
-                })();
+                break;
               }
-              console.log($scope.section);
-
-              break;
             }
-          }
-        });
+          });
+        }
       }
     })
+
   })
 
-  .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
-    // $ionicNavBarDelegate.showBackButton(true);
+  .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate) {
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
+
+    $scope.$on('$ionicView.beforeEnter', function (event, view) {
+
+      if (view.stateName == "tabs.home") {
+        var elem = document.getElementsByName("backButton");
+        for (var i = 0; i < elem.length; i++) {
+          angular.element(elem[i]).addClass('hide')
+        }
+      }
+      //angular.element(document.getElementsByName("backButton")).addClass('hide')
+    })
+
 
     function init() {
       var colorArray = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B',
@@ -137,10 +141,11 @@ angular.module('SimpleRESTIonic.controllers', [])
 
 
       MenuService.getMenu().then(function (data) {
+
         $scope.data = angular.copy(data.sections);
         for (i = 0; i < $scope.data.length; i++) {
 
-          if(i >= colorArray.length){
+          if (i >= colorArray.length) {
             $scope.data[i].color = 'background-color: #FF9800;';
           }
           else {
@@ -148,7 +153,7 @@ angular.module('SimpleRESTIonic.controllers', [])
           }
         }
 
-
+        $scope.title = data.homeTitle;
         $scope.dataReady = true;
 
 
