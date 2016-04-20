@@ -29,7 +29,9 @@
     {
       "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-file.git",
       "id": "cordova-plugin-file"
-    }
+    },
+    "com.lampa.startapp",
+    "org.apache.cordova.device"
   ],
   "cordovaPlatforms": [
     "ios",

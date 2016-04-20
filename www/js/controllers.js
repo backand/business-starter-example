@@ -29,7 +29,7 @@ angular.module('SimpleRESTIonic.controllers', [])
     function onLogin(username) {
       $rootScope.$broadcast('authorized');
       $state.go('tabs.home');
-      login.username = username || Backand.getUsername();
+      $rootScope.username = username || Backand.getUsername();
     }
   })
 
@@ -118,10 +118,21 @@ angular.module('SimpleRESTIonic.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($scope, MenuService, $ionicSideMenuDelegate) {
+  .controller('HomeCtrl', function ($scope, MenuService, $rootScope, $ionicSideMenuDelegate) {
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
+
+    $scope.$on('refreshCache', function(){
+      $scope.refreshData();
+    })
+
+    $scope.refreshData = function () {
+      init(true).finally(function () {
+        // Stop the ion-refresher from spinning
+        $scope.$broadcast('scroll.refreshComplete');
+      });
+    }
 
     $scope.$on('$ionicView.beforeEnter', function (event, view) {
 
@@ -135,12 +146,12 @@ angular.module('SimpleRESTIonic.controllers', [])
     })
 
 
-    function init() {
+    function init(force) {
       var colorArray = ['#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B',
         '#FFC107'];
 
 
-      MenuService.getMenu().then(function (data) {
+      return MenuService.getMenu(force).then(function (data) {
 
         $scope.data = angular.copy(data.sections);
         for (i = 0; i < $scope.data.length; i++) {
@@ -155,8 +166,6 @@ angular.module('SimpleRESTIonic.controllers', [])
 
         $scope.title = data.homeTitle;
         $scope.dataReady = true;
-
-
         console.log(data)
       });
     }

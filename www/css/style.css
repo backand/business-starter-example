@@ -2,32 +2,37 @@
 div.spinner {
   margin: auto;
   position: absolute;
-  top: 0; left: 0; bottom: 0; right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   height: 85px;
   text-align: center;
 }
+
 .spinner svg {
   width: 19% !important;
   height: 85px !important;
 }
 
 .nav-bar-title {
-  margin-left:20px;
+  margin-left: 20px;
 }
-
 
 @keyframes animatedBackground {
-  from { background-position: 0 0; }
-  to { background-position: 50% 0; }
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 50% 0;
+  }
 }
 
-
-.animate-area	{
+.animate-area {
 
 }
 
-
-.scroll-content2{
+.scroll-content2 {
   background: url(../img/mountains.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -36,4 +41,22 @@ div.spinner {
   animation: animatedBackground 10s linear;
 }
 
-.back-button{z-index:5;}
+.back-button {
+  z-index: 5;
+}
+
+.myBold {
+  font-weight: bold !important
+}
+
+.imageRound {
+  border: gray;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.myRound {
+  border-width: 4px;
+
+}
+

@@ -10,7 +10,12 @@ angular.module('SimpleRESTIonic.services', [])
       return $q.reject(response);
     };
   })
-
+  /**
+   * Service that handle and get Menu from Backand service
+   * Handle cache for offline use,
+   * and handle concurrency of multiple requests
+   * before first request finish
+   */
   .service('MenuService', function ($http, $q, Backand) {
 
 
@@ -26,9 +31,9 @@ angular.module('SimpleRESTIonic.services', [])
     }
 
 
-    service.getMenu = function () {
+    service.getMenu = function (forceRefresh) {
 
-      if (service.cached) {
+      if (service.cached && !forceRefresh) {
         return $q.resolve(service.cached);
       }
 
@@ -98,6 +103,44 @@ angular.module('SimpleRESTIonic.services', [])
 //     return $http.delete(getUrlForId(id));
 // };
   })
+  /**
+   * Service that handle link history, to change apearance of already view links
+   */
+  .service('LinkHistoryService', function () {
+    var key = 'historyLink';
+    var service = this;
+
+
+    service.isAlreadyViewLink = function (link) {
+      var strData = localStorage.getItem(key)
+      var list = JSON.parse(strData);
+
+      // check link exist in the list
+      if (list && list.indexOf(link) > -1) {
+        return true;
+      }
+
+      return false;
+    }
+
+    service.clearList = function () {
+      localStorage.setItem(key, '[]');
+    }
+
+    service.addLink = function (link) {
+      var strData = localStorage.getItem(key)
+      var list = JSON.parse(strData) || [];
+
+      // check item not exist
+      if (list.indexOf(link) === -1) {
+        list.push(link);
+        localStorage.setItem(key, JSON.stringify(list));
+      }
+
+    }
+
+
+  })
 
   .service('LoginService', function (Backand) {
     var service = this;
@@ -107,7 +150,7 @@ angular.module('SimpleRESTIonic.services', [])
       return Backand.signin(email, password);
     };
 
-    service.anonymousLogin= function(){
+    service.anonymousLogin = function () {
       // don't have to do anything here,
       // because we set app token att app.js
     }
@@ -125,12 +168,12 @@ angular.module('SimpleRESTIonic.services', [])
       return Backand.signout();
     };
 
-    service.signup = function(firstName, lastName, email, password, confirmPassword){
+    service.signup = function (firstName, lastName, email, password, confirmPassword) {
       return Backand.signup(firstName, lastName, email, password, confirmPassword);
     }
   })
 
-  .service('AuthService', function($http, Backand){
+  .service('AuthService', function ($http, Backand) {
 
     var self = this;
     var baseUrl = Backand.getApiUrl() + '/1/objects/';

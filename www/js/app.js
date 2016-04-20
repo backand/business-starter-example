@@ -8,12 +8,13 @@ angular.module('ionicApp',
     'SimpleRESTIonic.controllers',
     'SimpleRESTIonic.services',
     'directivesModule',
-    'ionMdInput'
+    'ionMdInput',
+    'ngCordova'
   ])
   .config(function (BackandProvider) {
-    BackandProvider.setAppName('mycompanystart');
-    BackandProvider.setSignUpToken('8b87f9fa-f751-4400-bded-6b5adcc9312a');
-    BackandProvider.setAnonymousToken('86e22c04-85c5-498a-a6cd-037293f8477c');
+    BackandProvider.setAppName('devcompstart2');
+    BackandProvider.setSignUpToken('b7c3f9c5-f509-4cd8-a8b8-fe79a9dcf431');
+    BackandProvider.setAnonymousToken('e0916818-3e5f-4b8f-b52d-d2377ab3802a');
   })
   .config(function ($ionicConfigProvider) {
     $ionicConfigProvider.scrolling.jsScrolling(false);
