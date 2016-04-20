@@ -141,7 +141,11 @@ angular.module('SimpleRESTIonic.controllers', [])
         for (var i = 0; i < elem.length; i++) {
           angular.element(elem[i]).addClass('hide')
         }
+
+        init();
+  
       }
+
       //angular.element(document.getElementsByName("backButton")).addClass('hide')
     })
 
@@ -170,7 +174,7 @@ angular.module('SimpleRESTIonic.controllers', [])
       });
     }
 
-    init();
+
   });
 
 
