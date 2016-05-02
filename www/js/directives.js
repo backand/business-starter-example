@@ -70,72 +70,74 @@ app.directive('sectionsMenu', function () {
     template: template
   };
 });
+
+function redirectAndroid(item) {
+  var scheme;
+  var storeUrl;
+  scheme = item.googleAppId;
+  storeUrl = item.googleplayUrl;
+
+  if (scheme) {
+      appAvailability.check(
+        scheme, // URI Scheme
+        function () {  // Success callback
+          window.OpenApplication(scheme); // opens stock Gmail app.
+        },
+        function () {  // Error callback
+          window.open(storeUrl || item.url, '_system', 'location=no');
+        })
+      }
+  else {
+    window.open(storeUrl || item.url, '_system', 'location=no');
+  }
+}
 app.directive('sectionItem', function (LinkHistoryService) {
 
   var controller = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
-      $scope.goToUrl = function (item) {
-        var url = item.url;
-        LinkHistoryService.addLink(url);
-        // window.open(url, '_system', 'location=yes');
 
-        var scheme;
-        var storeUrl;
+    /**
+     * go to url ->
+     * Alghoritm is:
+     * 1. App Scheme -> GoogleAppId   / AppleUrlScheme
+     * 2. Store Url  -> GooglePlayUrl / AppleStoreUrl
+     * 3. Simple Url -> Url
+     *
+     *
+     * @param item
+       */
+    $scope.goToUrl = function (item) {
+      var url = item.url;
+      LinkHistoryService.addLink(url);
 
-        if (ionic.Platform.isAndroid()) {
-          scheme = item.googleAppId;
-          storeUrl = item.googleplayUrl;
-        } else if (ionic.Platform.isIOS()) {
-          // Don't forget to add the org.apache.cordova.device plugin!
-          // if(device.platform === 'iOS') {
-          scheme = item.appleUrlscheme;
-          storeUrl = item.applestoreUrl;
-          window.open(item.appleUrlscheme, '_blank', 'location=no')
-
-          return;
-        }
-
-        // here only android
-
-        if(scheme) {
-          appAvailability.check(
-            scheme, // URI Scheme
-            function () {  // Success callback
-              // alert('have scheme open ' + scheme);
-              window.OpenApplication(scheme); // opens stock Gmail app.
-
-              // window.open(item.appleUrlScheme, '_system', 'location=no');
-              // console.log('Application available');
-            },
-            function () {  // Error callback
-
-
-              if(storeUrl){
-                // alert('don"t have scheme open ' + storeUrl);
-                  console.log('storeUrl', storeUrl);
-                  window.open(storeUrl || item.url, '_system', 'location=no');
-              }
-              else {
-                // alert('open url ' + url);
-                window.open(url, '_system', 'location=yes');
-              }
-            }
-          );
-        }
-        else {
-          window.open(url, '_system', 'location=yes');
-        }
-
-        return false;
+      if (ionic.Platform.isIOS()) {
+        // Don't forget to add the org.apache.cordova.device plugin!
+        // if(device.platform === 'iOS') {
+        var scheme = item.appleUrlscheme;
+        var storeUrl = item.applestoreUrl;
+        window.open(scheme || storeUrl || url, '_blank', 'location=no')
+        return;
       }
 
+      // here only android
+      redirectAndroid(item);
 
-      $scope.alreadyViewUrl = function (url) {
-        return LinkHistoryService.isAlreadyViewLink(url);
-      }
-    }
-    ],
+}
+else
+{
+  window.open(url, '_system', 'location=yes');
+}
 
-    template = `
+return false;
+}
+
+
+$scope.alreadyViewUrl = function (url) {
+  return LinkHistoryService.isAlreadyViewLink(url);
+}
+}
+],
+
+template = `
 <a class="item item-avatar animated fadeInRight menu-close" ng-click="goToUrl(item)" > 
     <img ng-src="{{item.imgUrl}}" class="imageRound" ng-class="::{myRound: alreadyViewUrl(item.url)}">  
     <h2 ng-class="::{myBold: alreadyViewUrl(item.url)}">{{item.itemTitle}}</h2> 
@@ -147,15 +149,15 @@ app.directive('sectionItem', function (LinkHistoryService) {
 </a> 
 `;
 
-  return {
-    restrict: 'EA', //Default in 1.3+
-    scope: {
-      item: '=',
-      index: '='
-    },
-    controller: controller,
-    template: template
-  }
-    ;
+return {
+  restrict: 'EA', //Default in 1.3+
+  scope: {
+    item: '=',
+    index: '='
+  },
+  controller: controller,
+  template: template
+}
+  ;
 })
 ;
