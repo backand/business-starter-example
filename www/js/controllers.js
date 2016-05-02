@@ -143,7 +143,7 @@ angular.module('SimpleRESTIonic.controllers', [])
         }
 
         init();
-  
+
       }
 
       //angular.element(document.getElementsByName("backButton")).addClass('hide')

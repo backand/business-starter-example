@@ -44,7 +44,7 @@ app.directive('sectionsMenu', function () {
 
       init();
 
-      $scope.refreshCache = function(){
+      $scope.refreshCache = function () {
         $rootScope.$broadcast('refreshCache');
       }
 
@@ -72,15 +72,15 @@ app.directive('sectionsMenu', function () {
 });
 app.directive('sectionItem', function (LinkHistoryService) {
 
-  var controller = ['$scope', '$http', function ($scope, $http) {
+  var controller = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
       $scope.goToUrl = function (item) {
         var url = item.url;
         LinkHistoryService.addLink(url);
-        window.open(url, '_system', 'location=yes');
+        // window.open(url, '_system', 'location=yes');
 
         var scheme;
         var storeUrl;
-/*
+
         if (ionic.Platform.isAndroid()) {
           scheme = item.googleAppId;
           storeUrl = item.googleplayUrl;
@@ -89,28 +89,41 @@ app.directive('sectionItem', function (LinkHistoryService) {
           // if(device.platform === 'iOS') {
           scheme = item.appleUrlscheme;
           storeUrl = item.applestoreUrl;
+          window.open(item.appleUrlscheme, '_blank', 'location=no')
+
+          return;
         }
 
-        item.scheme2 = scheme;
-        item.storeUrl2 = storeUrl;
+        // here only android
 
         if(scheme) {
           appAvailability.check(
             scheme, // URI Scheme
             function () {  // Success callback
-              window.open(item.appleUrlscheme, '_system', 'location=no');
-              console.log('Twitter is available');
+              // alert('have scheme open ' + scheme);
+              window.OpenApplication(scheme); // opens stock Gmail app.
+
+              // window.open(item.appleUrlScheme, '_system', 'location=no');
+              // console.log('Application available');
             },
             function () {  // Error callback
 
-              item.val = "val " + storeUrl || item.url;
-              window.open(storeUrl || item.url, '_system', 'location=no');
+
+              if(storeUrl){
+                // alert('don"t have scheme open ' + storeUrl);
+                  console.log('storeUrl', storeUrl);
+                  window.open(storeUrl || item.url, '_system', 'location=no');
+              }
+              else {
+                // alert('open url ' + url);
+                window.open(url, '_system', 'location=yes');
+              }
             }
           );
         }
         else {
           window.open(url, '_system', 'location=yes');
-        }*/
+        }
 
         return false;
       }
