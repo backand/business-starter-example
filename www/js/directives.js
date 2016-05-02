@@ -78,66 +78,59 @@ function redirectAndroid(item) {
   storeUrl = item.googleplayUrl;
 
   if (scheme) {
-      appAvailability.check(
-        scheme, // URI Scheme
-        function () {  // Success callback
-          window.OpenApplication(scheme); // opens stock Gmail app.
-        },
-        function () {  // Error callback
-          window.open(storeUrl || item.url, '_system', 'location=no');
-        })
-      }
+    appAvailability.check(
+      scheme, // URI Scheme
+      function () {  // Success callback
+        window.OpenApplication(scheme); // opens stock Gmail app.
+      },
+      function () {  // Error callback
+        window.open(storeUrl || item.url, '_system', 'location=no');
+      })
+  }
   else {
     window.open(storeUrl || item.url, '_system', 'location=no');
   }
 }
 app.directive('sectionItem', function (LinkHistoryService) {
 
-  var controller = ['$scope', '$rootScope', '$http', function ($scope, $rootScope, $http) {
+  var controller = ['$scope', function ($scope) {
 
-    /**
-     * go to url ->
-     * Alghoritm is:
-     * 1. App Scheme -> GoogleAppId   / AppleUrlScheme
-     * 2. Store Url  -> GooglePlayUrl / AppleStoreUrl
-     * 3. Simple Url -> Url
-     *
-     *
-     * @param item
+      /**
+       * go to url ->
+       * Alghoritm is:
+       * 1. App Scheme -> GoogleAppId   / AppleUrlScheme
+       * 2. Store Url  -> GooglePlayUrl / AppleStoreUrl
+       * 3. Simple Url -> Url
+       *
+       *
+       * @param item
        */
-    $scope.goToUrl = function (item) {
-      var url = item.url;
-      LinkHistoryService.addLink(url);
+      $scope.goToUrl = function (item) {
+        var url = item.url;
+        LinkHistoryService.addLink(url);
 
-      if (ionic.Platform.isIOS()) {
-        // Don't forget to add the org.apache.cordova.device plugin!
-        // if(device.platform === 'iOS') {
-        var scheme = item.appleUrlscheme;
-        var storeUrl = item.applestoreUrl;
-        window.open(scheme || storeUrl || url, '_blank', 'location=no')
-        return;
+        if (ionic.Platform.isIOS()) {
+          // Don't forget to add the org.apache.cordova.device plugin!
+          // if(device.platform === 'iOS') {
+          var scheme = item.appleUrlscheme;
+          var storeUrl = item.applestoreUrl;
+          window.open(scheme || storeUrl || url, '_blank', 'location=no')
+          return;
+        }
+
+        // here only android
+        redirectAndroid(item);
+
       }
 
-      // here only android
-      redirectAndroid(item);
 
-}
-else
-{
-  window.open(url, '_system', 'location=yes');
-}
+      $scope.alreadyViewUrl = function (url) {
+        return LinkHistoryService.isAlreadyViewLink(url);
+      }
+    }
+    ],
 
-return false;
-}
-
-
-$scope.alreadyViewUrl = function (url) {
-  return LinkHistoryService.isAlreadyViewLink(url);
-}
-}
-],
-
-template = `
+    template = `
 <a class="item item-avatar animated fadeInRight menu-close" ng-click="goToUrl(item)" > 
     <img ng-src="{{item.imgUrl}}" class="imageRound" ng-class="::{myRound: alreadyViewUrl(item.url)}">  
     <h2 ng-class="::{myBold: alreadyViewUrl(item.url)}">{{item.itemTitle}}</h2> 
@@ -149,15 +142,15 @@ template = `
 </a> 
 `;
 
-return {
-  restrict: 'EA', //Default in 1.3+
-  scope: {
-    item: '=',
-    index: '='
-  },
-  controller: controller,
-  template: template
-}
-  ;
+  return {
+    restrict: 'EA', //Default in 1.3+
+    scope: {
+      item: '=',
+      index: '='
+    },
+    controller: controller,
+    template: template
+  }
+    ;
 })
 ;
