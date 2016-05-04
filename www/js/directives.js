@@ -3,6 +3,23 @@
  */
 var app = angular.module('directivesModule', []);
 
+/**
+ *  http://stackoverflow.com/a/20072884/1543596
+ */
+app.directive('script', function() {
+  return {
+    restrict: 'E',
+    scope: false,
+    link: function(scope, elem, attr) {
+      if (attr.type === 'text/javascript-lazy') {
+        var code = elem.text();
+        var f = new Function(code);
+        f();
+      }
+    }
+  };
+});
+
 app.directive('section', function () {
 
   var controller = ['$scope', 'ionicMaterialMotion', 'ionicMaterialInk', '$timeout', function ($scope, ionicMaterialMotion, ionicMaterialInk, $timeout) {
@@ -71,7 +88,7 @@ app.directive('sectionsMenu', function () {
   };
 });
 
-function redirectAndroid(item) {
+function redirectAndroid(item, url) {
   var scheme;
   var storeUrl;
   scheme = item.googleAppId;
@@ -84,11 +101,11 @@ function redirectAndroid(item) {
         window.OpenApplication(scheme); // opens stock Gmail app.
       },
       function () {  // Error callback
-        window.open(storeUrl || item.url, '_system', 'location=no');
+        window.open(storeUrl || url, '_system', 'location=no');
       })
   }
   else {
-    window.open(storeUrl || item.url, '_system', 'location=no');
+    window.open(storeUrl || url, '_system', 'location=no');
   }
 }
 app.directive('sectionItem', function (LinkHistoryService) {
@@ -107,6 +124,14 @@ app.directive('sectionItem', function (LinkHistoryService) {
        */
       $scope.goToUrl = function (item) {
         var url = item.url;
+
+        var oktaToken = localStorage.getItem('oktaToken');
+
+        if(oktaToken){
+
+          url = "https://netafim.okta.com/login/sessionCookieRedirect?checkAccountSetupComplete=true&token=" + oktaToken + "&redirectUrl=" + url;
+        }
+
         LinkHistoryService.addLink(url);
 
         if (ionic.Platform.isIOS()) {
@@ -119,7 +144,7 @@ app.directive('sectionItem', function (LinkHistoryService) {
         }
 
         // here only android
-        redirectAndroid(item);
+        redirectAndroid(item, url);
 
       }
 

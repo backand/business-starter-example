@@ -13,6 +13,8 @@ angular.module('SimpleRESTIonic.controllers', [])
       });
     };
 
+
+
     $scope.login = function () {
       $scope.errorMsg = '';
       LoginService.signin(this.email, this.password)
@@ -118,10 +120,15 @@ angular.module('SimpleRESTIonic.controllers', [])
 
   })
 
-  .controller('HomeCtrl', function ($scope, MenuService, $rootScope, $ionicSideMenuDelegate) {
+  .controller('HomeCtrl', function ($scope, MenuService, $state, $rootScope, $ionicSideMenuDelegate) {
     $scope.toggleLeft = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
+
+    $scope.oktaLogin = function(){
+      $state.go('tabs.home');
+      console.log("okta from angular");
+    }
 
     $scope.$on('refreshCache', function(){
       $scope.refreshData();

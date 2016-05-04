@@ -10,20 +10,45 @@
 <!--</ion-view>-->
 <ion-view hide-nav-bar="true">
   <ion-content class="scroll-content2">
-    <div >
-      <div class="padding  animated bounceInLeft">
-        <div class="list">
-          <ion-md-input placeholder="Username" ng-model="email" highlight-color="balanced" type="text"></ion-md-input>
-          <ion-md-input placeholder="Password" ng-model="password" highlight-color="energized" type="password"></ion-md-input>
-        </div>
-        <div class="padding">
-          <button class="button button-block button-positive"
-                  ng-click="login()">Login
-          </button>
-          <a class="pull-right" ui-sref="tabs.home()">Guest Access</a>
-        </div>
 
-      </div>
-    </div>
+    <!--<div >-->
+      <!--<div class="padding  animated bounceInLeft">-->
+        <!--<div class="list">-->
+          <!--<ion-md-input placeholder="Username" ng-model="email" highlight-color="balanced" type="text"></ion-md-input>-->
+          <!--<ion-md-input placeholder="Password" ng-model="password" highlight-color="energized" type="password"></ion-md-input>-->
+        <!--</div>-->
+        <!--<div class="padding">-->
+          <!--<button class="button button-block button-positive"-->
+                  <!--ng-click="login()">Login-->
+          <!--</button>-->
+          <!--<a class="pull-right" ui-sref="tabs.home()">Guest Access</a>-->
+        <!--</div>-->
+
+      <!--</div>-->
+    <!--</div>-->
+    <!--Render the login widget here-->
+    <div id="okta-login-container"></div>
+
+    <!-- Script to init the widget -->
+    <script type="text/javascript-lazy">
+      //var baseUrl = 'https://dev-772895.oktapreview.com';
+       var baseUrl = 'https://netafim.okta.com';
+      var oktaSignIn = new OktaSignIn({baseUrl: baseUrl});
+
+      console.log('hi');
+      oktaSignIn.renderEl(
+        { el: '#okta-login-container' },
+        function (res) {
+          if (res.status === 'SUCCESS') {
+            console.log('User %s successfully authenticated %o', res.user.profile.login, res.user);
+            //console.log(res);
+            //res.session.setCookieAndRedirect('https://backand.com');
+            localStorage.setItem("oktaToken", res.session.token);
+            angular.element(document.getElementsByTagName("Body")).scope().oktaLogin()
+          }
+        }
+      );
+    </script>
+
   </ion-content>
 </ion-view>
